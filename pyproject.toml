@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "easyjax"
+version = "0.1.0"
+description = "Facilitates machine learning development for JAX."
+authors = ["Rohan Sikand <rsikand29@gmail.com>"]
+readme = "README.md"
+homepage = "https://github.com/rosikand/easyjax"
+keywords = ["python", "machine-learning", "jax"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+jax = "0.3.15"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
