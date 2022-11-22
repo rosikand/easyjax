@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "easyjax"
-version = "0.1.1"
+version = "0.1.2"
 description = "Facilitates machine learning development for JAX."
 authors = ["Rohan Sikand <rsikand29@gmail.com>"]
 readme = "README.md"

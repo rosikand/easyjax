@@ -21,7 +21,6 @@ class MeanMetric:
     # if isinstance(new_val, jnp.array): # squeeze only when true? 
     #     pass 
 
-    new_val = jnp.squeeze(new_val)  # remove any excess dimensions 
     self.vals.append(new_val)
 
   def reset(self):
@@ -39,7 +38,7 @@ class Accuracy(MeanMetric):
     """
 
     def update(self, logits, labels):
-        new_val = jnp.squeeze(jnp.mean(jnp.argmax(logits, -1) == labels))
+        new_val = jnp.mean(jnp.argmax(logits, -1) == labels)
         self.vals.append(new_val)
 
 
@@ -50,12 +49,12 @@ def compute_accuracy(logits, labels):
 
 
 
-def compute_binary_accuracy(logits, targets):
+def compute_binary_accuracy(logits, labels):
   """
   Computes stand alone accuracy for binary classification
   where the net outputs one element per prediction. 
   Source: https://github.com/tristandeleu/jax-meta-learning/blob/master/jax_meta/utils/metrics.py
   """
-
-  return jnp.mean((logits > 0).astype(targets.dtype) == targets)
+  return jnp.mean((logits > 0).astype(type(labels)) == labels)
+  
   
