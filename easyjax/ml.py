@@ -39,6 +39,7 @@ def update_step(params, grads, lr):
     return tree_util.tree_map(gradient_step, params, grads)
 
 
+
 def stateless_loss(params, net_apply, loss_function, x, y, return_logits=False):
     """
     Computes loss in single function using arguments in stateless (no OOP). 
@@ -64,3 +65,37 @@ def stateless_loss(params, net_apply, loss_function, x, y, return_logits=False):
         return loss_value
     else:
         loss_value, model_preds
+
+
+
+@jax.jit
+def get_loss_grad_and_val(params, net_apply, loss_function, x, y, return_logits=False):
+    """
+    Computes stateless loss and gradient with respect to params and 
+    returns both. Useful to have gradient performed in a function
+    since then it can be @jax.jit'd. 
+    Arguments: 
+    -----------
+    - params: pytree of parameters for the net 
+    - net_apply: model apply fn 
+    - loss_function: function for computing the loss 
+    - x: input
+    - y: label 
+    - return_logits: if True, returns logits as well (must specify hax_aux=True when taking grad then)
+    Returns: 
+    -----------
+    loss_val: scalar loss value 
+    grads: gradients of loss value wrt to params 
+    if return_logits, returns (loss, logits, grads)
+    """
+
+    loss_grad_fn = value_and_grad(stateless_loss)
+    if return_logits == False:
+        return loss_grad_fn(params, net_apply, loss_function, x, y)
+    else:
+        values, grads = loss_grad_fn(params, net_apply, loss_function, x, y)
+        loss_val = values[0]
+        logits = values[1]
+        return (loss_val, logits, grads)
+
+  
