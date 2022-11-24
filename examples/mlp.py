@@ -44,7 +44,7 @@ def evaluate():
     for batch in dset:
         x, y = batch
         predictions = net_apply(net_params, x)
-        new_acc = jnp.mean((predictions > 0).astype(type(y)) == y)
+        new_acc = jnp.mean((predictions > 0.5).astype(type(y)) == y)
         eval_acc.update(new_acc)
 
     acc = eval_acc.get()
